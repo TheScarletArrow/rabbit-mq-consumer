@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.PostInDto
 import ru.scarlet.rabbit.event.Comment
 import ru.scarlet.rabbit.event.Post
+import ru.scarlet.rabbit.event.PostStatus
 import ru.scarlet.rabbit.exception.PostNotFoundException
 import ru.scarlet.rabbit.repository.CommentRepository
 import ru.scarlet.rabbit.repository.PostRepository
@@ -31,6 +32,7 @@ class PostService(
         post.author = postInDto.author
         post.title = postInDto.title
         post.updatedAt = if (Random.nextBoolean()) Instant.now().toEpochMilli() else null
+        post.status = PostStatus.PUBLISHED
         return postRepository.save(post)
     }
 

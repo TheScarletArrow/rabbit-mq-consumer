@@ -12,6 +12,7 @@ class Post() {
     var createdAt: Long? = null
     var updatedAt: Long? = null
     var body: String? = null
+    var status: PostStatus? = null
     override fun toString(): String {
         return "Post(id=$id, title=$title, content=$content, author=$author, createdAt=$createdAt, updatedAt=$updatedAt, body=$body)"
     }
@@ -27,8 +28,16 @@ class Comment
     var author: String? = null
     var createdAt: Long? = null
     var updatedAt: Long? = null
+    var status: CommentStatus? = null
     override fun toString(): String {
         return "Comment(id=$id, postId=$postId, content=$content, author=$author, createdAt=$createdAt, updatedAt=$updatedAt)"
     }
 
+}
+
+enum class PostStatus {
+    DRAFT, PUBLISHED, DELETED
+}
+enum class CommentStatus {
+    DRAFT, PUBLISHED, DELETED
 }
