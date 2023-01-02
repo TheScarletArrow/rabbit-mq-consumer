@@ -3,8 +3,8 @@ package ru.scarlet.rabbit.service
 import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.PostInDto
 import ru.scarlet.rabbit.event.Post
+import ru.scarlet.rabbit.exception.PostNotFoundException
 import ru.scarlet.rabbit.repository.PostRepository
-import java.lang.RuntimeException
 import java.time.Instant
 import java.util.*
 import kotlin.jvm.optionals.getOrElse
@@ -36,7 +36,9 @@ class PostService(
     }
 
     fun updatePost(postInDto: PostInDto, id: UUID): Post? {
-        postRepository.findById(id).isPresent.let {
+        postRepository.findById(id).getOrElse {
+            throw PostNotFoundException(id)
+        }.let {
             val post = postRepository.findById(id).get()
             post.body = postInDto.body ?: post.body
             post.title = postInDto.title ?: post.title
@@ -45,6 +47,10 @@ class PostService(
             post.updatedAt = Instant.now().toEpochMilli()
             return postRepository.save(post)
         }
+    }
+
+    fun getPostById(id: UUID): Post? {
+        return postRepository.findById(id).getOrElse { throw PostNotFoundException(id) }
     }
 
 

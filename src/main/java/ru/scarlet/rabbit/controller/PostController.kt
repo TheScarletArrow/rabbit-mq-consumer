@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.scarlet.rabbit.dto.PostInDto
 import ru.scarlet.rabbit.event.Post
+import ru.scarlet.rabbit.exception.PostNotFoundException
 import ru.scarlet.rabbit.service.PostService
 import java.util.UUID
 
@@ -35,9 +36,13 @@ class PostController(private val postService: PostService) {
         return ResponseEntity.ok(savePost)
     }
 
-//    @GetMapping("/{id}")
-//    fun getPostById(@PathVariable id: UUID): ResponseEntity<Post> {
-//        val post = postService.getPostById(id)
-//        return ResponseEntity.ok(post)
-//    }
+    @GetMapping("/{id}")
+    fun getPostById(@PathVariable id: UUID): ResponseEntity<Post> {
+        try {
+            val post = postService.getPostById(id)
+            return ResponseEntity.ok(post)
+        } catch (e: PostNotFoundException) {
+            throw e
+        }
+    }
 }
