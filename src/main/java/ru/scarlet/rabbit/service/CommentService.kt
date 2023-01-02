@@ -3,6 +3,7 @@ package ru.scarlet.rabbit.service
 import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.CommentInDto
 import ru.scarlet.rabbit.event.Comment
+import ru.scarlet.rabbit.event.CommentStatus
 import ru.scarlet.rabbit.exception.CommentNotFoundException
 import ru.scarlet.rabbit.repository.CommentRepository
 import java.time.Instant
@@ -21,6 +22,7 @@ class CommentService(
         comment.content = commentInDto.content
         comment.postId = commentInDto.postId
         comment.createdAt = Instant.now().toEpochMilli()
+        comment.status = CommentStatus.PUBLISHED
        return commentRepository.save(comment)
     }
 
