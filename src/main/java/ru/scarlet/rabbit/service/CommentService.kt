@@ -3,8 +3,11 @@ package ru.scarlet.rabbit.service
 import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.CommentInDto
 import ru.scarlet.rabbit.event.Comment
+import ru.scarlet.rabbit.exception.CommentNotFoundException
 import ru.scarlet.rabbit.repository.CommentRepository
 import java.time.Instant
+import java.util.*
+import kotlin.jvm.optionals.getOrElse
 import kotlin.random.Random
 
 @Service
@@ -29,5 +32,9 @@ class CommentService(
 
     fun getAll(): List<Comment>? =
         commentRepository.findAll()
+
+    fun getCommentById(id: UUID): Comment? {
+        return commentRepository.findById(id).getOrElse {throw CommentNotFoundException(id) }
+    }
 
 }

@@ -17,4 +17,14 @@ class ExceptionHandler {
         errorResponse.path = "/post"
         return ResponseEntity.status(errorResponse.status!!).body(errorResponse)
     }
+
+    @ExceptionHandler(CommentNotFoundException::class)
+    fun handleCommentNotFoundException(e: CommentNotFoundException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse()
+        errorResponse.message = e.message
+        errorResponse.status = 404
+        errorResponse.timestamp = System.currentTimeMillis()
+        errorResponse.path = "/comment"
+        return ResponseEntity.status(errorResponse.status!!).body(errorResponse)
+    }
 }
