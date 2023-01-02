@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.scarlet.rabbit.dto.PostInDto
+import ru.scarlet.rabbit.event.Comment
 import ru.scarlet.rabbit.event.Post
 import ru.scarlet.rabbit.exception.PostNotFoundException
 import ru.scarlet.rabbit.service.PostService
@@ -41,6 +42,16 @@ class PostController(private val postService: PostService) {
         try {
             val post = postService.getPostById(id)
             return ResponseEntity.ok(post)
+        } catch (e: PostNotFoundException) {
+            throw e
+        }
+    }
+
+    @GetMapping("/{id}/comments")
+    fun getPostComments(@PathVariable id: UUID): ResponseEntity<List<Comment>> {
+        try {
+            val comments = postService.getCommentsByPostId(id)
+            return ResponseEntity.ok(comments)
         } catch (e: PostNotFoundException) {
             throw e
         }

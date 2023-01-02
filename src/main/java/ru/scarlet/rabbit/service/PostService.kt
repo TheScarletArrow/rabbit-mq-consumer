@@ -2,8 +2,10 @@ package ru.scarlet.rabbit.service
 
 import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.PostInDto
+import ru.scarlet.rabbit.event.Comment
 import ru.scarlet.rabbit.event.Post
 import ru.scarlet.rabbit.exception.PostNotFoundException
+import ru.scarlet.rabbit.repository.CommentRepository
 import ru.scarlet.rabbit.repository.PostRepository
 import java.time.Instant
 import java.util.*
@@ -12,7 +14,8 @@ import kotlin.random.Random
 
 @Service
 class PostService(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
+    private val commentRepository: CommentRepository
 ) {
     fun getPostByTitle(title: String): Post {
         return postRepository.findByTitle(title)
@@ -51,6 +54,14 @@ class PostService(
 
     fun getPostById(id: UUID): Post? {
         return postRepository.findById(id).getOrElse { throw PostNotFoundException(id) }
+    }
+
+    fun getCommentsByPostId(id: UUID): List<Comment>? {
+        commentRepository.findByPostId(id).getOrElse{
+            throw PostNotFoundException(id)
+        }.let {
+            return commentRepository.findByPostId(id).get()
+        }
     }
 
 
