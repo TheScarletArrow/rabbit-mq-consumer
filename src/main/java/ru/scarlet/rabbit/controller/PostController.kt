@@ -27,7 +27,7 @@ class PostController(private val postService: PostService) {
     @PostMapping("/")
     fun createPost(@RequestBody post: PostInDto): ResponseEntity<Post> {
 
-        val savePost = postService.savePost(post)
+        val savePost = postService.savePostByDto(post)
         return ResponseEntity.ok(savePost)
     }
 

@@ -1,5 +1,6 @@
 package ru.scarlet.rabbit.service
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.PostInDto
 import ru.scarlet.rabbit.event.Comment
@@ -14,7 +15,7 @@ import kotlin.jvm.optionals.getOrElse
 import kotlin.random.Random
 
 @Service
-class PostService(
+class PostService @Autowired constructor(
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository
 ) {
@@ -23,7 +24,7 @@ class PostService(
     }
 
     fun savePost(post: Post) : Post = postRepository.save(post)
-    fun savePost(postInDto: PostInDto) : Post {
+    fun savePostByDto(postInDto: PostInDto) : Post {
         //random boolean
         var post = Post()
         post.createdAt = Instant.now().toEpochMilli()
