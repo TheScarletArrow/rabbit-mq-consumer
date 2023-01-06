@@ -27,4 +27,14 @@ class ExceptionHandler {
         errorResponse.path = "/comment"
         return ResponseEntity.status(errorResponse.status!!).body(errorResponse)
     }
+
+    @ExceptionHandler(SessionNotFoundException::class)
+    fun handleSessionNotFoundException(e: SessionNotFoundException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse()
+        errorResponse.message = e.message
+        errorResponse.status = 404
+        errorResponse.timestamp = System.currentTimeMillis()
+        errorResponse.path = "/session"
+        return ResponseEntity.status(errorResponse.status!!).body(errorResponse)
+    }
 }

@@ -32,7 +32,7 @@ class PostService @Autowired constructor(
         post.title = postInDto.title
         post.author = postInDto.author
         post.title = postInDto.title
-        post.updatedAt = if (Random.nextBoolean()) Instant.now().toEpochMilli() else null
+        post.updatedAt = 0
         post.status = PostStatus.PUBLISHED
         return postRepository.save(post)
     }
@@ -51,6 +51,7 @@ class PostService @Autowired constructor(
             post.author = postInDto.author ?: post.author
             post.title = postInDto.title ?: post.title
             post.updatedAt = Instant.now().toEpochMilli()
+            post.content = postInDto.body ?: post.content
             return postRepository.save(post)
         }
     }
