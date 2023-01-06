@@ -1,5 +1,6 @@
 package ru.scarlet.rabbit.exception
 
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -15,8 +16,9 @@ class ExceptionHandler {
         errorResponse.status = 404
         errorResponse.timestamp = System.currentTimeMillis()
         errorResponse.path = "/post"
-        return ResponseEntity.status(errorResponse.status!!).body(errorResponse)
-    }
+        var headers = HttpHeaders()
+        headers.add("Error", "${e.message}")
+        return ResponseEntity.status(errorResponse.status!!).headers(headers).body(errorResponse)    }
 
     @ExceptionHandler(CommentNotFoundException::class)
     fun handleCommentNotFoundException(e: CommentNotFoundException): ResponseEntity<ErrorResponse> {
@@ -25,8 +27,9 @@ class ExceptionHandler {
         errorResponse.status = 404
         errorResponse.timestamp = System.currentTimeMillis()
         errorResponse.path = "/comment"
-        return ResponseEntity.status(errorResponse.status!!).body(errorResponse)
-    }
+        var headers = HttpHeaders()
+        headers.add("Error", "${e.message}")
+        return ResponseEntity.status(errorResponse.status!!).headers(headers).body(errorResponse)    }
 
     @ExceptionHandler(SessionNotFoundException::class)
     fun handleSessionNotFoundException(e: SessionNotFoundException): ResponseEntity<ErrorResponse> {
@@ -35,6 +38,19 @@ class ExceptionHandler {
         errorResponse.status = 404
         errorResponse.timestamp = System.currentTimeMillis()
         errorResponse.path = "/session"
-        return ResponseEntity.status(errorResponse.status!!).body(errorResponse)
+        var headers = HttpHeaders()
+        headers.add("Error", "${e.message}")
+        return ResponseEntity.status(errorResponse.status!!).headers(headers).body(errorResponse)    }
+
+    @ExceptionHandler(CanNotStopSessionException::class)
+    fun handleCanNotStopSessionException(e: CanNotStopSessionException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse()
+        errorResponse.message = e.message
+        errorResponse.status = 400
+        errorResponse.timestamp = System.currentTimeMillis()
+        errorResponse.path = "/session"
+        var headers = HttpHeaders()
+        headers.add("Error", "${e.message}")
+        return ResponseEntity.status(errorResponse.status!!).headers(headers).body(errorResponse)
     }
 }

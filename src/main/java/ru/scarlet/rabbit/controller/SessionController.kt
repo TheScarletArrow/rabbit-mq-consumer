@@ -1,5 +1,8 @@
 package ru.scarlet.rabbit.controller
 
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -27,9 +30,11 @@ class SessionController(private val sessionService: SessionService) {
     @GetMapping("/{id}/stop")
     fun stopSessionById(@PathVariable id: UUID): ResponseEntity<SessionOutDto> {
         try {
-            sessionService.stopSessionByUUID(id)
+            var stopSessionByUUID = sessionService.stopSessionByUUID(id)
 
-            return ResponseEntity.ok().build()
+            val httpHeaders :HttpHeaders = HttpHeaders()
+            httpHeaders.add("Location", "/session/${id}")
+            return ResponseEntity.status(200).headers(httpHeaders).body(stopSessionByUUID)
         } catch (e: SessionNotFoundException) {
             throw e
         }

@@ -3,6 +3,7 @@ package ru.scarlet.rabbit.service
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.SessionOutDto
+import ru.scarlet.rabbit.exception.CanNotStopSessionException
 import ru.scarlet.rabbit.exception.SessionNotFoundException
 import ru.scarlet.rabbit.mapper.SessionMapper
 import ru.scarlet.rabbit.repository.SessionRepository
@@ -17,12 +18,16 @@ class SessionService @Autowired constructor(
 )
 {
 
-    fun stopSessionByUUID(uuid: UUID) {
+    fun stopSessionByUUID(uuid: UUID) : SessionOutDto {
 
         var session: SessionOutDto = getSessionById(uuid)
-        session.isActive = false
-        session.updatedAt = Instant.now().toEpochMilli()
-        sessionRepository.save(sessionMapper.toEntity(session))
+        if (session.isActive) {
+            session.isActive = false
+            session.updatedAt = Instant.now().toEpochMilli()
+            return  sessionMapper.toDto(sessionRepository.save(sessionMapper.toEntity(session)))
+        } else {
+            throw CanNotStopSessionException(uuid)
+        }
     }
 
     fun getSessionById(id: UUID): SessionOutDto {
