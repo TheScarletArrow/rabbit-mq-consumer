@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import ru.scarlet.rabbit.dto.PostInDto
 import ru.scarlet.rabbit.event.Comment
+import ru.scarlet.rabbit.event.CommentStatus
 import ru.scarlet.rabbit.event.Post
 import ru.scarlet.rabbit.event.PostStatus
 import ru.scarlet.rabbit.exception.PostNotFoundException
@@ -12,14 +13,13 @@ import ru.scarlet.rabbit.repository.PostRepository
 import java.time.Instant
 import java.util.*
 import kotlin.jvm.optionals.getOrElse
-import kotlin.random.Random
 
 @Service
 class PostService @Autowired constructor(
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository
 ) {
-    fun getPostByTitle(title: String): Post {
+    fun getPostByTitle(title: String): List<Post> {
         return postRepository.findByTitle(title)
     }
 
@@ -70,6 +70,8 @@ class PostService @Autowired constructor(
     fun deletePostById(id: UUID): Post? {
         val postById = getPostById(id)
         postById!!.status = PostStatus.DELETED
+        val comments = getCommentsByPostId(id)
+        comments?.forEach { it.status = CommentStatus.DELETED }
         return postRepository.save(postById)
     }
 

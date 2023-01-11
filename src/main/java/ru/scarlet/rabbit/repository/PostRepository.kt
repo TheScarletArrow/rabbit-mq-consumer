@@ -5,7 +5,7 @@ import ru.scarlet.rabbit.event.Post
 import java.util.*
 
 interface PostRepository : MongoRepository<Post, UUID> {
-    fun findByTitle(title: String): Post
+    fun findByTitle(title: String): List<Post>
 
 
 }
