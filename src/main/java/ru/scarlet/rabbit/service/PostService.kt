@@ -45,14 +45,13 @@ class PostService @Autowired constructor(
         postRepository.findById(id).getOrElse {
             throw PostNotFoundException(id)
         }.let {
-            val post = postRepository.findById(id).get()
-            post.body = postInDto.body ?: post.body
-            post.title = postInDto.title ?: post.title
-            post.author = postInDto.author ?: post.author
-            post.title = postInDto.title ?: post.title
-            post.updatedAt = Instant.now().toEpochMilli()
-            post.content = postInDto.body ?: post.content
-            return postRepository.save(post)
+            it.body = postInDto.body ?: it.body
+            it.title = postInDto.title ?: it.title
+            it.author = postInDto.author ?: it.author
+            it.title = postInDto.title ?: it.title
+            it.updatedAt = Instant.now().toEpochMilli()
+            it.content = postInDto.body ?: it.content
+            return postRepository.save(it)
         }
     }
 
@@ -66,6 +65,12 @@ class PostService @Autowired constructor(
         }.let {
             return commentRepository.findByPostId(id).get()
         }
+    }
+
+    fun deletePostById(id: UUID): Post? {
+        val postById = getPostById(id)
+        postById!!.status = PostStatus.DELETED
+        return postRepository.save(postById)
     }
 
 

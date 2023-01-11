@@ -1,6 +1,7 @@
 package ru.scarlet.rabbit.controller
 
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -41,6 +42,16 @@ class PostController(private val postService: PostService) {
     fun getPostById(@PathVariable id: UUID): ResponseEntity<Post> {
         try {
             val post = postService.getPostById(id)
+            return ResponseEntity.ok(post)
+        } catch (e: PostNotFoundException) {
+            throw e
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletePostById(@PathVariable id: UUID): ResponseEntity<Post> {
+        try {
+            val post = postService.deletePostById(id)
             return ResponseEntity.ok(post)
         } catch (e: PostNotFoundException) {
             throw e
