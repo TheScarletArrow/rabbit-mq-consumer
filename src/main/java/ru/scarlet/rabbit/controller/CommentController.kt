@@ -1,6 +1,7 @@
 package ru.scarlet.rabbit.controller
 
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -36,5 +37,15 @@ class CommentController(private val commentService: CommentService) {
        } catch (e: CommentNotFoundException) {
            throw e
        }
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteCommentById(@PathVariable id: UUID): ResponseEntity<Comment> {
+        try {
+            val comment = commentService.deleteCommentById(id)
+            return ResponseEntity.ok(comment)
+        } catch (e: CommentNotFoundException) {
+            throw e
+        }
     }
 }

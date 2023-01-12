@@ -39,4 +39,9 @@ class CommentService(
         return commentRepository.findById(id).getOrElse {throw CommentNotFoundException(id) }
     }
 
+    fun deleteCommentById(id: UUID): Comment? {
+        val commentById = getCommentById(id)
+        commentById!!.status = CommentStatus.DELETED
+        return commentRepository.save(commentById)
+    }
 }
