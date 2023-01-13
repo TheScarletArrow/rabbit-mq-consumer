@@ -7,7 +7,12 @@ import ru.scarlet.rabbit.event.CurrentSession
 import java.util.*
 
 @Repository
-interface SessionRepository : MongoRepository<CurrentSession, UUID>, CrudRepository<CurrentSession, UUID> {
+interface SessionRepository : MongoRepository<CurrentSession, UUID> {
+fun findAllByIsActive(isActive: Boolean): List<CurrentSession>
 
+
+    fun findByIsActiveTrue(): List<CurrentSession>
+
+    fun findByIsActiveFalse(): List<CurrentSession>
 
 }

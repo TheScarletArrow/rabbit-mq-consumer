@@ -12,7 +12,7 @@ class CurrentSession {
     var customerId: UUID = UUID.randomUUID()
     var startedAt: Long = System.currentTimeMillis()
     var updatedAt: Long? = null
-    var isActive: Boolean = true
+    var isActive: Boolean? = null
     override fun toString(): String {
         return "CurrentSession(sessionId=$id, sessionName='$sessionName', customerId=$customerId, startedAt=$startedAt, isActive=$isActive)"
     }

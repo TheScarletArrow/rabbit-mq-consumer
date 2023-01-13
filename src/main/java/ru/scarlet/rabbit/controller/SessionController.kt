@@ -1,12 +1,11 @@
 package ru.scarlet.rabbit.controller
 
-import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.scarlet.rabbit.dto.SessionOutDto
 import ru.scarlet.rabbit.exception.SessionNotFoundException
@@ -32,7 +31,7 @@ class SessionController(private val sessionService: SessionService) {
         try {
             var stopSessionByUUID = sessionService.stopSessionByUUID(id)
 
-            val httpHeaders :HttpHeaders = HttpHeaders()
+            val httpHeaders: HttpHeaders = HttpHeaders()
             httpHeaders.add("Location", "/session/${id}")
             return ResponseEntity.status(200).headers(httpHeaders).body(stopSessionByUUID)
         } catch (e: SessionNotFoundException) {
@@ -40,9 +39,15 @@ class SessionController(private val sessionService: SessionService) {
         }
     }
 
-    @GetMapping("/")
-    fun getAllSessions(): ResponseEntity<List<SessionOutDto>> {
-        return ResponseEntity.ok(sessionService.getAll())
-    }
+    @GetMapping
+    fun getAllSessionsByUser(@RequestParam isActive: String): ResponseEntity<List<SessionOutDto>> {
 
+
+        return when (isActive) {
+            "true" -> ResponseEntity.ok(sessionService.getAllActive())
+            "false" -> ResponseEntity.ok(sessionService.getAllInactive())
+            else -> ResponseEntity.ok(sessionService.getAll())
+        }
+
+    }
 }

@@ -39,4 +39,12 @@ class SessionService @Autowired constructor(
     fun getAll(): List<SessionOutDto>? {
         return sessionMapper.toDtoList(sessionRepository.findAll())
     }
+
+    fun getAllActive(): List<SessionOutDto>? {
+        return sessionMapper.toDtoList(sessionRepository.findByIsActiveTrue())
+    }
+
+    fun getAllInactive(): List<SessionOutDto>? {
+        return sessionMapper.toDtoList(sessionRepository.findByIsActiveFalse())
+    }
 }

@@ -15,7 +15,7 @@ class SessionMapperImpl : SessionMapper {
             customerId = session.customerId
             startedAt = session.startedAt
             updatedAt = session.updatedAt
-            isActive = session.isActive
+            isActive = session.isActive?:false
         }
     }
 

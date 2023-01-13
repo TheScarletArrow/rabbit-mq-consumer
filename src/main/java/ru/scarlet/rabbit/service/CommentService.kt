@@ -17,7 +17,7 @@ class CommentService(
 ) {
 
     fun saveCommentByDto(commentInDto: CommentInDto) : Comment {
-        var comment = Comment()
+        val comment = Comment()
         comment.author = commentInDto.author
         comment.content = commentInDto.content
         comment.postId = commentInDto.postId
